@@ -1,5 +1,4 @@
-## DynamoDB
-
+## DynamoDB Overview
 - Flexible NoSQL database service
 - Single-digit millisecond latency at any scale.
 - Fully managed and supports both document and key-value data models.
@@ -8,9 +7,9 @@
 - Spread across 3 geographically distinct data centres
 
 ### Types of Reads
-- eventual consistent reads:
+- Eventual Consistent Reads:
   + consistency across all copies of data in data centres generally reached with a 1 second
-- strongly consistent reads:
+- Strongly Consistent Reads:
   + returns a results that reflects all writes that received a successful response prior to the read.
   + read performance not as good as eventual consistent reads
 
@@ -18,7 +17,6 @@
 - Table: collection of key-value stores
 - Item: an individual unit in a collection, e.g. a student or product for sale
 - Attribute: the key-value associated with an Item.
-
 
 ### Pricing
 Provisioned Throughput Capacity:
@@ -32,7 +30,6 @@ TODO: Examples
 Create tables using Nodejs script on Lambda or EC2
 
 ### Primary Keys
-
 #### Single Attribute Keys
 Single attribute keys (similar to unique ID) are a Partition Keys (Hash Key) composed of only one attribute (e.g. User ID)
 
@@ -66,7 +63,6 @@ Global Secondary Indices:
 - It is advisable to use Query, `Get` or `BatchGetItem` API functions instead for more efficient retrieval of desired information.
 
 ### Calculating Provision Throughput
-
 - Calculating Read Provisioned Throughput:
   - All reads are rounded up in increments of 4KB
   - Eventually Consistent Reads consists of 2 reads per second
@@ -85,10 +81,31 @@ Global Secondary Indices:
   Size of Write in KB * Writes Per Second
   ```
 
+Errors concerning Provisioned Throughput:
+ - 400 HTTP Status Code: `ProvisionedThroughputExceededException`
+ - Maximum allowed provisioned throughput for a table or for one or more global secondary indexes has been exceeded  
 
+### Web Identity Providers
+Using the `AssumeRoleWithWebIdentity` API a user can authenticate with third parties like Facebook, Google and other Open-ID Connect-compatible Identity providers.
 
+Web Identity Provider authentication process
+1. Authenticate Identity provider (FB, Google etc)
+2. Web Identity token return to users device
+3. `AssumeRoleWithWebIdentity` Request made to AWS Security Token service
+4. Temporary security credentials then provided to user (default 1 hour):
+  - SubjectFromWebIdentity token provided by AWS STS allows user to access AWS resources
 
 ### Other
+#### Batch Operations
+If an application need to read multiple items, `BatchGetItem` API request can be used to retrieve up to 1MB of data, containing as many as 100 items. And this request can be used to retrieve multiple items from multiple tables.
+
+#### Conditional Writes
+DynamoDB can be written to at the same time by 2 or more users causing duplication of Items with differing values
+Conditional writes can be used to prevent this by only allowing a write to occur when an Item's attribute is equal to a certain value. E.g. if old value = old value then up to new value. Conditional updates are idempotent operations.
+
+
+#### Atomic Counters
+- DynamoDB also supports atomic counters, where `UpdateItem` operation is used to increment or decrement the value of an existing attribute without interfering with other write requests. All write requests are applied in the order in which they were received. Atomic counters are not idempotent
 
 #### DynamoDB Streams
 DynamoDB Streams is a feature that captures any kind of modification of the DynamoDB tables, this includes taking images of states of an Item before and after modification. The images are stored for up to 24 hours and Streams is useful as an entry point for other functions performed on the data in the Stream.
