@@ -50,6 +50,8 @@ All AMIs are categorised as either backed by Amazon EBS or backed by instance st
   - EBS backed instances can be stopped. You will not lose the data on this instance if it is stopped
   - You can reboot both, you will not lose your data
   - By default, both root volumes will be deleted on termination, however with EBS volumes, you can tell AWS to keep the root device volume
+  - Volumes restored from Snapshot need to be initialised to perform at the volumes specified I/O capacity.
+  - Can change EBS volume type and size without detaching the volume, but requires running commands to let the operating system use the new volume size
 
 ### Elastic File System
 File storage service for EC2 instances (block based storage). Storage capacity is elastic and allows decreasing or increasing capacity as files are removed or added. Can be mounted to more than 1 EC2 instance unlike EBS.
