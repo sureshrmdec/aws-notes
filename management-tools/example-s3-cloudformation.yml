@@ -1,0 +1,15 @@
+---
+AWSTemplateFormatVersion: 2010-09-09    
+Parameters:   
+  BucketName:   
+    Description: Description of Bucket cReated from Stack
+    Type: String  
+    Default: bucketfromstack
+Resources:    
+  S3Bucket:    
+    Type: 'AWS::S3::Bucket'    
+    Properties: {}    
+Outputs:    
+  S3BucketName:    
+    Value: !Ref S3Bucket    
+    Description: Name of S3 bucket

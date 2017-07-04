@@ -66,6 +66,11 @@ File storage service for EC2 instances (block based storage). Storage capacity i
 - Act as a high availability proxy for EC2 instances. Route traffic to and from EC2 instances and a DNS endpoint
 - Health checks - time intervals checking whether an EC2 instance is working
 - Have their own DNS name, not given an IP address
+- Can be of two types: internal and external (denoted by the DNS configuration)
+- Sticky Sessions: by default, an ELB routes each request independently to an application instance with smallest load. Session affinity, enables the load balancer to lock a user down to a specific web server, which ensures that all requests from users during the session are sent to the same server
+- Stick sessions can be of two types:
+  - Duration based, where ELB creats the session cookie itself. Stickiness Policy configuration defines cookie expiration, which establishes the duration of validity for each cookie.
+  - Application Controlled: ELB uses a special cookied to associate the session with the server that handled the request. The application-generated cookie name corresponds to the cookie name specified in the policy configuration. 
 
 ### Volumes and Snapshots:
  - snapshots of encrypted volumes are encrypted automatically and volumes restored from encrypted snapshots are encrypted automatically
